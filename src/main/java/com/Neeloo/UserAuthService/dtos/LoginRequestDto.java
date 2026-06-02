@@ -1,6 +1,7 @@
 package com.Neeloo.UserAuthService.dtos;
 
 public class LoginRequestDto {
+
     private String email;
 
     private String password;
