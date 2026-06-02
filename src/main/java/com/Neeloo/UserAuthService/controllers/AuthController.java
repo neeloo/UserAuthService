@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 /*
 1. Signup API: POST
     Return: ResponseEntity<UserDTO>. Why not ResponseEntity<User>? Because we don't want to return the password in the response. So we will create a UserDTO class which will have all the fields of User except the password.
