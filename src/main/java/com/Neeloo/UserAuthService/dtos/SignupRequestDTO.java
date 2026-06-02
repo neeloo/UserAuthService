@@ -1,5 +1,6 @@
 package com.Neeloo.UserAuthService.dtos;
 
+
 public class SignupRequestDTO {
     private String name;
     private String email;
