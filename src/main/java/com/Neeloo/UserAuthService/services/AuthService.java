@@ -92,6 +92,11 @@ public class AuthService implements IAuthService {
 
         return user;
     }
+
+    @Override
+    public Boolean validateToken(String token) {
+        return null;
+    }
 }
 
 /*

@@ -4,15 +4,21 @@ package com.Neeloo.UserAuthService.controllers;
 import com.Neeloo.UserAuthService.dtos.LoginRequestDto;
 import com.Neeloo.UserAuthService.dtos.SignupRequestDTO;
 import com.Neeloo.UserAuthService.dtos.UserDTO;
+import com.Neeloo.UserAuthService.dtos.UserToken;
+import com.Neeloo.UserAuthService.exceptions.UnauthorizedException;
 import com.Neeloo.UserAuthService.models.User;
 import com.Neeloo.UserAuthService.services.IAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 /*
 1. Signup API: POST
@@ -46,17 +52,32 @@ public class AuthController {
         }
     }
 
-
     @PostMapping("/login")
     public ResponseEntity<UserDTO> login(@RequestBody LoginRequestDto loginRequestDto){
         try{
-            User user = authService.login(
+            UserToken userToken = authService.login(
                     loginRequestDto.getEmail(),
                     loginRequestDto.getPassword());
-            UserDTO userDTO = user.toUserDTO();
-            return new ResponseEntity<>(userDTO, HttpStatus.OK);
+            UserDTO userDTO = userToken.getUser().toUserDTO();
+            String token = userToken.getToken();
+
+            MultiValueMap<String,String> headers = new LinkedMultiValueMap<>();
+            headers.add(HttpHeaders.SET_COOKIE, token);
+
+            HttpHeaders httpHeaders = new HttpHeaders(headers);
+
+            return new ResponseEntity<>(userDTO, httpHeaders, HttpStatus.OK);
         }catch (Exception e){
             throw e;
+        }
+    }
+
+
+    @PostMapping("/validate-token")
+    public void validateToken(@RequestBody String token){
+        Boolean res = authService.validateToken(token);
+        if(!res){
+            throw new UnauthorizedException("Invalid token");
         }
     }
 
