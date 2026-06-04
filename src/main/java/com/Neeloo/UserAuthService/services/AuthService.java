@@ -1,7 +1,5 @@
 package com.Neeloo.UserAuthService.services;
 
-
-
 import com.Neeloo.UserAuthService.exceptions.IncorrectPasswordException;
 import com.Neeloo.UserAuthService.exceptions.UserAlreadyExistException;
 import com.Neeloo.UserAuthService.exceptions.UserNotRegisteredException;
